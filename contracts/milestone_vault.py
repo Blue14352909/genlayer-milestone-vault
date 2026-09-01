@@ -97,11 +97,15 @@ class MilestoneVault(gl.Contract):
     # 1. create_project
     # -------------------------------------------------------------------
     @gl.public.write
-    def create_project(self, provider: Address, description: str) -> str:
+    def create_project(self, provider: str, description: str) -> str:
         """Create a new project. Caller becomes buyer. State: CREATED."""
         if not description or not description.strip():
             raise gl.vm.UserError("Description required")
-        provider_str = _addr_to_hex(provider)
+        try:
+            provider_address = Address(provider)
+        except Exception:
+            raise gl.vm.UserError("Invalid provider address")
+        provider_str = _addr_to_hex(provider_address)
         if not provider_str or provider_str == "0x0000000000000000000000000000000000000000":
             raise gl.vm.UserError("Provider address required")
 
@@ -120,7 +124,7 @@ class MilestoneVault(gl.Contract):
             "milestone_count": "0",
         }
         self.projects[pid] = json.dumps(project)
-        self.provider_addresses[pid] = Address(provider)
+        self.provider_addresses[pid] = provider_address
         return pid
 
     # -------------------------------------------------------------------

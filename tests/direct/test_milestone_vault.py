@@ -110,10 +110,30 @@ def test_create_project_zero_address(direct_deploy, direct_vm, direct_alice):
             "Test project")
 
 
+def test_create_project_with_hex_string_address(direct_deploy, direct_vm,
+                                               direct_alice, direct_bob):
+    """Studio sends provider as a 0x... hex string, not an Address object.
+    Regression: old Address-typed param failed with Studio calldata."""
+    contract = direct_deploy("contracts/milestone_vault.py")
+    direct_vm.sender = direct_alice
+
+    # Pass provider as a literal hex string — exactly what Studio does
+    provider_hex = to_hex(direct_bob)
+    pid = contract.create_project(provider_hex, "Studio project")
+    p = contract.get_project(pid)
+
+    assert p["buyer"] == to_hex(direct_alice)
+    assert p["provider"] == provider_hex
+    assert p["status"] == "CREATED"
+
+    # Also test that invalid string is rejected
+    with pytest.raises(Exception, match="Invalid provider address"):
+        contract.create_project("not-a-valid-address", "Bad project")
+
+
 # ===========================================================================
 # 2. FUNDING
 # ===========================================================================
-
 def test_fund_project_only_buyer(direct_deploy, direct_vm, direct_alice,
                                  direct_bob, direct_charlie):
     """Non-buyer cannot fund the project."""
