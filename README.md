@@ -87,7 +87,7 @@ _PLACEHOLDER — to be filled after running the full lifecycle on GenLayer Studi
 
 Key invariants:
 - No double payout (paid flag + state machine)
-- Solvency: released ≤ reserved ≤ funded
+- Solvency: released + reserved ≤ funded
 - HTTPS evidence URL input validation
 - Native Address storage for payout (no caller-supplied addresses)
 - Authorization enforced: only buyer funds/creates/approves/rejects, only provider submits evidence
