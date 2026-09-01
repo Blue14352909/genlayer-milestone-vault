@@ -20,40 +20,44 @@ MilestoneVault lets a buyer escrow GEN for a provider's work. The buyer creates 
 
 ## Proof Checklist
 
-- [ ] Contract code implements 6 write methods + 5 view methods (11 total)
-- [ ] Accounting invariant enforced: `released + reserved ≤ funded`
-- [ ] Provider address stored natively at project creation
-- [ ] Payout uses only the stored native address
-- [ ] No double payout possible
-- [ ] Rejected milestones remain reserved
-- [ ] Direct VM tests cover all 31 specified scenarios
-- [ ] All direct tests pass with pinned SDK
-- [ ] Lint passes for the contract
-- [ ] CI workflow exists and runs on Ubuntu/Python 3.12
+- [x] Contract code implements 6 write methods + 5 view methods (11 total)
+- [x] Accounting invariant enforced: `released + reserved ≤ funded`
+- [x] Provider address stored natively at project creation
+- [x] Payout uses only the stored native address
+- [x] No double payout possible
+- [x] Rejected milestones remain reserved
+- [x] Direct VM tests cover all 33 specified scenarios
+- [x] All direct tests pass with pinned SDK
+- [x] Lint passes for the contract
+- [x] CI workflow exists and runs on Ubuntu/Python 3.12
+- [x] On-chain lifecycle: create → fund → milestone → evidence → approve → payout
 
 ## Test Command and Result
 ```
 python -m pytest tests/direct/ -v
 ```
-_RESULT: PENDING — to be filled after running tests_
+Result: **33 passed**
 
 ## Lint Command and Result
 ```
 genvm-lint contracts/milestone_vault.py
 ```
-_RESULT: PENDING — to be filled after running lint_
+Result: **Lint passed (3 checks)**
 
 ## GitHub Repository
-_URL: PLACEHOLDER — to be filled after push_
+https://github.com/Blue14352909/genlayer-milestone-vault
+
+## Final Commit
+https://github.com/Blue14352909/genlayer-milestone-vault/commit/5a1643a
 
 ## Studio Contract Address
-_ADDRESS: PLACEHOLDER — to be filled after deployment_
+[`0x5cb455CDEC12CF788BA3D780bda96598B9D8e10c`](https://explorer-studio.genlayer.com/address/0x5cb455CDEC12CF788BA3D780bda96598B9D8e10c)
 
 ## Deployment Transaction
-_HASH: PLACEHOLDER — to be filled after deployment_
+[`0xfc2f79c066d7d75dc6a3071967e836ef76fe60f5d14e5f4993779ad61142fd28`](https://explorer-studio.genlayer.com/tx/0xfc2f79c066d7d75dc6a3071967e836ef76fe60f5d14e5f4993779ad61142fd28)
 
 ## Successful Approval/Payout Transaction
-_HASH: PLACEHOLDER — to be filled after running approval on-chain_
+[`0xae3c729fcf7e53e3fbe8fef0936fa3a5c5841e2d66c0e022dee9a69fc4119d93`](https://explorer-studio.genlayer.com/tx/0xae3c729fcf7e53e3fbe8fef0936fa3a5c5841e2d66c0e022dee9a69fc4119d93)
 
 ## Known Limitations
 - Human buyer makes the approval decision; evidence is informational, not automatically verified
@@ -61,7 +65,8 @@ _HASH: PLACEHOLDER — to be filled after running approval on-chain_
 - One provider per project
 - No dispute resolution mechanism
 
-## Suggested Evidence Links
-- Repository: _PLACEHOLDER_
-- Contract on Explorer: _PLACEHOLDER_
-- Approval/payout transaction: _PLACEHOLDER_
+## Evidence Links
+- Repository: https://github.com/Blue14352909/genlayer-milestone-vault
+- Contract on Explorer: https://explorer-studio.genlayer.com/address/0x5cb455CDEC12CF788BA3D780bda96598B9D8e10c
+- Deployment: https://explorer-studio.genlayer.com/tx/0xfc2f79c066d7d75dc6a3071967e836ef76fe60f5d14e5f4993779ad61142fd28
+- Approval/payout: https://explorer-studio.genlayer.com/tx/0xae3c729fcf7e53e3fbe8fef0936fa3a5c5841e2d66c0e022dee9a69fc4119d93

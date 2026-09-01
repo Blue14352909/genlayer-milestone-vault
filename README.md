@@ -64,17 +64,14 @@ python -m pytest tests/direct/ -v
 
 ## Deployment
 
-**Contract Address:** _PLACEHOLDER — to be filled after deployment_
+**Contract Address:** [`0x5cb455CDEC12CF788BA3D780bda96598B9D8e10c`](https://explorer-studio.genlayer.com/address/0x5cb455CDEC12CF788BA3D780bda96598B9D8e10c)
 
 ### On-Chain Evidence
 
-_PLACEHOLDER — to be filled after running the full lifecycle on GenLayer Studio_
-
 | Case | Transaction | Explorer |
 |---|---|---|
-| Deployment | _PLACEHOLDER_ | _PLACEHOLDER_ |
-| **APPROVED** (payout) | _PLACEHOLDER_ | _PLACEHOLDER_ |
-| **REJECTED** (funds locked) | _PLACEHOLDER_ | _PLACEHOLDER_ |
+| Deployment | `0xfc2f79...` | [View](https://explorer-studio.genlayer.com/tx/0xfc2f79c066d7d75dc6a3071967e836ef76fe60f5d14e5f4993779ad61142fd28) |
+| **APPROVED** (payout) | `0xae3c72...` | [View](https://explorer-studio.genlayer.com/tx/0xae3c729fcf7e53e3fbe8fef0936fa3a5c5841e2d66c0e022dee9a69fc4119d93) |
 
 ### How to deploy
 
