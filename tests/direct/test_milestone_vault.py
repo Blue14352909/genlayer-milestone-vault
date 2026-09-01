@@ -492,7 +492,8 @@ def test_approval_updates_accounting(direct_deploy, direct_vm, direct_alice,
     p = contract.get_project(pid)
     assert p["total_reserved"] == "70"
     assert p["total_released"] == "30"
-    assert contract.get_available_escrow(pid) == "30"
+    # released + reserved = 30 + 70 = 100 = funded → available = 0
+    assert contract.get_available_escrow(pid) == "0"
     assert contract.get_balance() == "70"
 
     # Approve mid2
@@ -502,7 +503,8 @@ def test_approval_updates_accounting(direct_deploy, direct_vm, direct_alice,
     p = contract.get_project(pid)
     assert p["total_reserved"] == "0"
     assert p["total_released"] == "100"
-    assert contract.get_available_escrow(pid) == "100"
+    # released + reserved = 100 + 0 = 100 = funded → available = 0
+    assert contract.get_available_escrow(pid) == "0"
     assert contract.get_balance() == "0"
 
 
@@ -587,10 +589,39 @@ def test_released_never_exceeds_funded(direct_deploy, direct_vm, direct_alice,
     assert p["total_funded"] == "100"
 
 
+def test_approved_payout_does_not_reopen_escrow(direct_deploy, direct_vm,
+                                              direct_alice, direct_bob):
+    """After approving a milestone, released funds cannot be re-allocated.
+    Regression: old code used funded - reserved, which reopened spent escrow."""
+    contract = direct_deploy("contracts/milestone_vault.py")
+    pid = _create_project(contract, direct_vm, direct_alice, direct_bob)
+    _fund_project(contract, direct_vm, direct_alice, pid, 100)
+
+    # Create and approve a 60 GEN milestone
+    mid1 = _create_milestone(contract, direct_vm, direct_alice, pid, 60)
+    _submit_evidence(contract, direct_vm, direct_bob, mid1)
+    _approve(contract, direct_vm, direct_alice, mid1)
+
+    # After approval: reserved=0, released=60, available should be 40
+    p = contract.get_project(pid)
+    assert p["total_reserved"] == "0"
+    assert p["total_released"] == "60"
+    assert contract.get_available_escrow(pid) == "40"
+
+    # 50 GEN milestone must fail (only 40 available)
+    direct_vm.sender = direct_alice
+    with pytest.raises(Exception, match="exceeds available escrow"):
+        contract.create_milestone(pid, "Too much", "Criteria", 50)
+
+    # 40 GEN milestone must succeed
+    mid2 = _create_milestone(contract, direct_vm, direct_alice, pid, 40)
+    assert mid2 == "m-2"
+    assert contract.get_available_escrow(pid) == "0"
+
+
 # ===========================================================================
 # 8. EDGE CASES
 # ===========================================================================
-
 def test_nonexistent_project_fails(direct_deploy, direct_vm, direct_alice):
     """Accessing nonexistent project/milestone raises error."""
     contract = direct_deploy("contracts/milestone_vault.py")

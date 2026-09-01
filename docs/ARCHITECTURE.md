@@ -98,19 +98,19 @@ The provider address is stored natively as `Address` in `provider_addresses: Tre
 When creating a milestone, the contract checks:
 
 ```
-milestone.amount ≤ project.total_funded - project.total_reserved
+milestone.amount ≤ project.total_funded - project.total_released - project.total_reserved
 ```
 
-This prevents the buyer from creating milestones that exceed the available escrow. Rejected and pending milestones remain reserved and cannot be reused.
+This prevents the buyer from creating milestones that exceed the available escrow. Rejected and pending milestones remain reserved and cannot be reused. Approved (released) funds cannot be re-allocated.
 
 ## Accounting Invariant
 
 ```
-total_released ≤ total_reserved ≤ total_funded
+total_released + total_reserved ≤ total_funded
 ```
 
 This invariant holds at all times:
 - Creating a milestone increases `total_reserved`
-- Approving a milestone decreases `total_reserved` and increases `total_released`
+- Approving a milestone decreases `total_reserved` and increases `total_released` (net zero change to `released + reserved`)
 - Rejecting a milestone does not change accounting (funds stay reserved)
-- No path causes `total_released` to exceed `total_funded`
+- No path causes `total_released + total_reserved` to exceed `total_funded`

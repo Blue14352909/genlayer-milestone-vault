@@ -12,7 +12,7 @@ This is a deterministic escrow contract. It does NOT use AI, LLMs, web
 retrieval, nondeterministic execution, or automated evaluation.
 
 Hard invariants:
-    released <= reserved <= funded
+    released + reserved <= funded
     No milestone can be paid twice.
     Rejected milestones remain reserved.
     Provider cannot redirect payout.
@@ -74,7 +74,7 @@ class MilestoneVault(gl.Contract):
 
     Entities stored as JSON strings in TreeMap[str, str].
     Provider addresses stored natively as Address for safe payout.
-    Accounting invariant: released <= reserved <= funded.
+    Accounting invariant: released + reserved <= funded.
     """
 
     # Counters and balance
@@ -183,7 +183,8 @@ class MilestoneVault(gl.Contract):
         amount_int = int(amount)
         funded = int(p["total_funded"])
         reserved = int(p["total_reserved"])
-        available = funded - reserved
+        released = int(p["total_released"])
+        available = funded - released - reserved
 
         if amount_int > available:
             raise gl.vm.UserError(
@@ -355,11 +356,11 @@ class MilestoneVault(gl.Contract):
 
     @gl.public.view
     def get_available_escrow(self, project_id: str) -> str:
-        """Get available escrow for a project (funded - reserved)."""
+        """Get available escrow for a project (funded - released - reserved)."""
         if project_id not in self.projects:
             raise gl.vm.UserError("Project not found")
         p = json.loads(self.projects[project_id])
-        available = int(p["total_funded"]) - int(p["total_reserved"])
+        available = int(p["total_funded"]) - int(p["total_released"]) - int(p["total_reserved"])
         return str(available)
 
 

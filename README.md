@@ -4,7 +4,7 @@ Deterministic buyer-controlled milestone escrow on GenLayer.
 
 ## Problem
 
-Escrow systems traditionally rely on either party clicking "approve," which reintroduces the trust problem. Buyers want proof that deliverables exist before releasing funds, but smart contracts cannot natively verify off-chain work.
+Escrow systems need safe allocation: buyers must not be able to over-commit funds across multiple milestones, approved payments must not reopen spent escrow, and the same milestone must never be paid twice. Most on-chain escrow either trusts a single party or relies on complex oracle mechanisms.
 
 ## Solution
 
@@ -35,7 +35,7 @@ This is a deterministic escrow contract. It does **not** use AI, LLMs, web retri
 ## Accounting Invariant
 
 ```
-total_released ≤ total_reserved ≤ total_funded
+total_released + total_reserved ≤ total_funded
 ```
 
 ## Installation

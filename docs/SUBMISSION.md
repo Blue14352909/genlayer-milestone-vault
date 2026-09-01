@@ -7,7 +7,7 @@ MilestoneVault
 Deterministic buyer-controlled milestone escrow: buyer locks GEN, provider submits evidence, buyer approves or rejects, approval pays provider once.
 
 ## Short Description
-MilestoneVault lets a buyer escrow GEN for a provider's work. The buyer creates milestones with fixed amounts. The provider submits HTTPS evidence URLs. Only the buyer manually approves or rejects. Approval releases escrowed funds to the provider exactly once. Rejection keeps funds reserved. The contract enforces: total released ≤ total reserved ≤ total funded.
+MilestoneVault lets a buyer escrow GEN for a provider's work. The buyer creates milestones with fixed amounts. The provider submits HTTPS evidence URLs. Only the buyer manually approves or rejects. Approval releases escrowed funds to the provider exactly once. Rejection keeps funds reserved. The contract enforces: total released + total reserved ≤ total funded.
 
 ## User Path / Demo Flow
 1. Buyer creates a project (`create_project`) specifying the provider's wallet address
@@ -20,8 +20,8 @@ MilestoneVault lets a buyer escrow GEN for a provider's work. The buyer creates 
 
 ## Proof Checklist
 
-- [ ] Contract code implements all 7 public methods
-- [ ] Accounting invariant enforced: `released ≤ reserved ≤ funded`
+- [ ] Contract code implements 6 write methods + 5 view methods (11 total)
+- [ ] Accounting invariant enforced: `released + reserved ≤ funded`
 - [ ] Provider address stored natively at project creation
 - [ ] Payout uses only the stored native address
 - [ ] No double payout possible
